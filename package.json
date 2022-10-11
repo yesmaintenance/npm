@@ -17,8 +17,8 @@
 		"star": "ts-node src/star-used.ts"
 	},
 	"devDependencies": {
-		"@lightrix/config": "0.0.2",
-		"@lightrix/scripts": "0.0.2",
+		"@lightrix/config": "0.0.3",
+		"@lightrix/scripts": "0.0.3",
 		"@octokit/core": "4.0.5",
 		"@types/node": "18.8.4",
 		"all-the-package-repos": "2.0.484",
