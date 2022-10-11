@@ -1,0 +1,7 @@
+{
+	"compilerOptions": {
+		"outDir": "dist"
+	},
+	"extends": "@lightrix/config/tsconfig.json",
+	"include": ["src"]
+}

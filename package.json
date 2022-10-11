@@ -1,0 +1,29 @@
+{
+	"name": "@nikolarhristov/maintenance",
+	"version": "0.0.1",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"build": "lightrix build src/*.ts src/lib/*.ts",
+		"dependabot": "ts-node src/dependabot.ts",
+		"edit": "ts-node src/edit-features.ts",
+		"maintenance": "npm run dependabot",
+		"star": "ts-node src/star-used.ts",
+		"ts-node": "ts-node"
+	},
+	"devDependencies": {
+		"@lightrix/config": "workspace:0.0.2",
+		"@lightrix/scripts": "workspace:0.0.2",
+		"@octokit/core": "4.0.5",
+		"@types/node": "18.8.4",
+		"all-the-package-repos": "2.0.484",
+		"deepmerge-ts": "4.2.2",
+		"dotenv": "16.0.3",
+		"fast-glob": "3.2.12",
+		"ts-node": "10.9.1",
+		"zod": "3.19.1"
+	},
+	"publishConfig": {
+		"access": "restricted"
+	}
+}
