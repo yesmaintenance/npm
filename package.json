@@ -3,17 +3,22 @@
 	"version": "0.0.1",
 	"type": "module",
 	"private": true,
+	"bin": {
+		"dependabot": "./dist/dependabot.js",
+		"edit": "./dist/edit-features.js",
+		"node": "./dist/node.js",
+		"star": "./dist/star-used.js"
+	},
 	"scripts": {
 		"build": "lightrix build src/*.ts src/lib/*.ts",
 		"dependabot": "ts-node src/dependabot.ts",
 		"edit": "ts-node src/edit-features.ts",
-		"maintenance": "npm run dependabot",
-		"star": "ts-node src/star-used.ts",
-		"ts-node": "ts-node"
+		"node": "ts-node src/node.ts",
+		"star": "ts-node src/star-used.ts"
 	},
 	"devDependencies": {
-		"@lightrix/config": "workspace:0.0.2",
-		"@lightrix/scripts": "workspace:0.0.2",
+		"@lightrix/config": "0.0.2",
+		"@lightrix/scripts": "0.0.2",
 		"@octokit/core": "4.0.5",
 		"@types/node": "18.8.4",
 		"all-the-package-repos": "2.0.484",

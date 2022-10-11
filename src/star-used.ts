@@ -10,6 +10,10 @@ const octokit = new Octokit({
 	auth: env.GITHUB_AUTH_TOKEN,
 });
 
+const repositories: {
+	[key: string]: any;
+} = allGitHubRepositories;
+
 const dependencies = new Set<string>();
 
 const packages = await FastGlob(
@@ -59,10 +63,6 @@ for (const packageFile of packages) {
 	}
 }
 
-const keyedRepositories: {
-	[key: string]: any;
-} = allGitHubRepositories;
-
 for (const dependency of dependencies) {
-	star(keyedRepositories[dependency]);
+	star(repositories[dependency]);
 }
