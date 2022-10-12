@@ -28,20 +28,22 @@ for (const [directory, packages] of directories) {
 		}
 	}
 
-	try {
-		await fs.promises.mkdir(githubDir + "/workflows", {
-			recursive: true,
-		});
-	} catch {
-		console.log(`Could not create: ${githubDir}`);
-	}
+	if (nodeWorkflowBase.size > 0) {
+		try {
+			await fs.promises.mkdir(githubDir + "/workflows", {
+				recursive: true,
+			});
+		} catch {
+			console.log(`Could not create: ${githubDir}`);
+		}
 
-	try {
-		await fs.promises.writeFile(
-			`${githubDir}/workflows/node.yml`,
-			`${Array.from(nodeWorkflowBase).join("\n")}\n`
-		);
-	} catch {
-		console.log(`Could not create node base for: ${githubDir}`);
+		try {
+			await fs.promises.writeFile(
+				`${githubDir}/workflows/node.yml`,
+				`${Array.from(nodeWorkflowBase).join("\n")}\n`
+			);
+		} catch {
+			console.log(`Could not create node base for: ${githubDir}`);
+		}
 	}
 }
