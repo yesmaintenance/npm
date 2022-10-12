@@ -21,7 +21,7 @@
 		"@lightrix/scripts": "0.0.3",
 		"@octokit/core": "4.0.5",
 		"@types/node": "18.8.4",
-		"all-the-package-repos": "2.0.484",
+		"all-the-package-repos": "2.0.486",
 		"deepmerge-ts": "4.2.2",
 		"dotenv": "16.0.3",
 		"fast-glob": "3.2.12",
