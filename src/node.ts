@@ -1,36 +1,48 @@
 import fs from "fs";
-import { resolve } from "path";
+import { dirname, resolve } from "path";
 
 import directories from "./lib/directories.js";
+import packageTypes from "./lib/packageTypes.js";
 
 for (const [directory, packages] of directories) {
 	const githubDir = directory + "/.github";
-	let pass = false;
+
+	let nodeWorkflowBase = new Set<string>();
 
 	for (const _package of packages) {
-		if (_package.indexOf("package.json") !== -1) {
-			pass = true;
+		const packageDirectory = dirname(_package).replace(directory, "");
+		const environment = packageTypes.get(_package.split("/").pop());
+		if (typeof environment !== "undefined" && environment === "npm") {
+			nodeWorkflowBase.add(
+				(
+					await fs.promises.readFile(
+						resolve("./src/templates/.github/workflows/node")
+					)
+				).toString()
+			);
+
+			nodeWorkflowBase.add(`            - run: pnpm install
+              working-directory: ${packageDirectory ? packageDirectory : "/"}
+
+            - run: pnpm run build
+              working-directory: ${packageDirectory ? packageDirectory : "/"}`);
 		}
 	}
 
-	if (pass) {
-		try {
-			await fs.promises.mkdir(githubDir + "/workflows", {
-				recursive: true,
-			});
-		} catch {
-			console.log(`Could not create: ${githubDir}`);
-		}
+	try {
+		await fs.promises.mkdir(githubDir + "/workflows", {
+			recursive: true,
+		});
+	} catch {
+		console.log(`Could not create: ${githubDir}`);
+	}
 
-		try {
-			await fs.promises.writeFile(
-				`${githubDir}/workflows/node.yml`,
-				await fs.promises.readFile(
-					resolve("./src/templates/.github/workflows/node")
-				)
-			);
-		} catch {
-			console.log(`Could not create node workflows for: ${githubDir}`);
-		}
+	try {
+		await fs.promises.writeFile(
+			`${githubDir}/workflows/node.yml`,
+			`${Array.from(nodeWorkflowBase).join("\n")}\n`
+		);
+	} catch {
+		console.log(`Could not create node base for: ${githubDir}`);
 	}
 }
