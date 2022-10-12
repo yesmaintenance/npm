@@ -28,7 +28,7 @@ for (const [directory, packages] of directories) {
 			);
 
 			nodeWorkflowBase.add(`
-            - run: pnpm install --frozen-lockfile
+            - run: pnpm install
               working-directory: ${packageDirectory}
             - run: pnpm run build --if-present
               working-directory: ${packageDirectory}`);
