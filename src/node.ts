@@ -10,8 +10,14 @@ for (const [directory, packages] of directories) {
 	let nodeWorkflowBase = new Set<string>();
 
 	for (const _package of packages) {
-		const packageDirectory = dirname(_package).replace(directory, "");
+		let packageDirectory = dirname(_package).replace(directory, "");
+
+		packageDirectory = packageDirectory?.endsWith("/")
+			? packageDirectory
+			: `${packageDirectory}/`;
+
 		const environment = packageTypes.get(_package.split("/").pop());
+
 		if (typeof environment !== "undefined" && environment === "npm") {
 			nodeWorkflowBase.add(
 				(
@@ -21,10 +27,12 @@ for (const [directory, packages] of directories) {
 				).toString()
 			);
 
-			nodeWorkflowBase.add(`            - run: pnpm install --frozen-lockfile
-              working-directory: ${packageDirectory ? packageDirectory : "/"}
+			nodeWorkflowBase.add(`
+            - run: pnpm install --frozen-lockfile
+              working-directory: ${packageDirectory}
             - run: pnpm run build --if-present
-              working-directory: ${packageDirectory ? packageDirectory : "/"}`);
+              working-directory: ${packageDirectory}
+`);
 		}
 	}
 

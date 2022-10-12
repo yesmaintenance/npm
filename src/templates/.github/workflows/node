@@ -21,3 +21,6 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
+                  cache-dependency-path: |
+                      '**/pnpm-lock.yaml'
+                      '**/package-lock.json'
