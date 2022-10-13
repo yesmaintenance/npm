@@ -26,7 +26,7 @@ for (const [directory, packages] of directories) {
 			nodeWorkflowBase.add(`
             - run: pnpm install
               working-directory: .${packageDirectory}
-            - run: pnpm run build --if-present
+            - run: pnpm run build
               working-directory: .${packageDirectory}`);
 		}
 	}
