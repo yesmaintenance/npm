@@ -1,4 +1,4 @@
-import t from"fs";import{dirname as a,resolve as p}from"path";import{fileURLToPath as l}from"url";import m from"../lib/directories.js";import d from"../lib/package-types.js";const f=l(import.meta.url),u=a(f);var v=async()=>{for(const[n,c]of await m()){const e=n+"/.github";let r=new Set;for(const i of c){const o=a(i).replace(n,""),s=(await d()).get(i.split("/").pop());typeof s<"u"&&s==="npm"&&(r.add((await t.promises.readFile(p(`${u}/../../src/templates/.github/workflows/node`))).toString()),r.add(`
+import t from"fs";import{dirname as a,resolve as p}from"path";import{fileURLToPath as l}from"url";import m from"../lib/directories.js";import f from"../lib/package-types.js";const d=l(import.meta.url),u=a(d);var v=async()=>{for(const[n,c]of await m()){const e=n+"/.github";let r=new Set;for(const i of c){const o=a(i).replace(n,""),s=(await f()).get(i.split("/").pop());typeof s<"u"&&s==="npm"&&(r.add((await t.promises.readFile(p(`${u}/../../src/templates/.github/workflows/node`))).toString()),r.add(`
             - uses: pnpm/action-setup@v2.2.3
               with:
                   version: 7.13.4
@@ -18,8 +18,7 @@ import t from"fs";import{dirname as a,resolve as p}from"path";import{fileURLToPa
                   node-version: \${{ matrix.node-version }}
                   cache: "pnpm"
                   cache-dependency-path: |
-                      **/pnpm-lock.yaml
-                  working-directory: .${o}
+                      .${o}/pnpm-lock.yaml
             - run: pnpm install
               working-directory: .${o}
             - run: pnpm run build

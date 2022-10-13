@@ -52,8 +52,7 @@ export default async () => {
                   node-version: \${{ matrix.node-version }}
                   cache: "pnpm"
                   cache-dependency-path: |
-                      **/pnpm-lock.yaml
-                  working-directory: .${packageDirectory}
+                      .${packageDirectory}/pnpm-lock.yaml
             - run: pnpm install
               working-directory: .${packageDirectory}
             - run: pnpm run build
