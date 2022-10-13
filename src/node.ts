@@ -10,11 +10,7 @@ for (const [directory, packages] of directories) {
 	let nodeWorkflowBase = new Set<string>();
 
 	for (const _package of packages) {
-		let packageDirectory = dirname(_package).replace(directory, "");
-
-		packageDirectory = packageDirectory?.endsWith("/")
-			? packageDirectory
-			: `${packageDirectory}/`;
+		const packageDirectory = dirname(_package).replace(directory, "");
 
 		const environment = packageTypes.get(_package.split("/").pop());
 
@@ -29,9 +25,9 @@ for (const [directory, packages] of directories) {
 
 			nodeWorkflowBase.add(`
             - run: pnpm install
-              working-directory: ${packageDirectory}
+              working-directory: .${packageDirectory}
             - run: pnpm run build --if-present
-              working-directory: ${packageDirectory}`);
+              working-directory: .${packageDirectory}`);
 		}
 	}
 
