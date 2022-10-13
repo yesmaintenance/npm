@@ -47,13 +47,12 @@ export default async () => {
                           --unsafe-perm=true,
                           --lockfile-only
                         ]
-                  dest: .${packageDirectory}
             - uses: actions/setup-node@v3.5.0
               with:
                   node-version: \${{ matrix.node-version }}
                   cache: "pnpm"
                   cache-dependency-path: |
-                      .${packageDirectory}/pnpm-lock.yaml
+                      **/pnpm-lock.yaml
                   working-directory: .${packageDirectory}
             - run: pnpm install
               working-directory: .${packageDirectory}

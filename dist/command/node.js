@@ -1,4 +1,4 @@
-import t from"fs";import{dirname as a,resolve as p}from"path";import{fileURLToPath as l}from"url";import m from"../lib/directories.js";import d from"../lib/package-types.js";const f=l(import.meta.url),u=a(f);var $=async()=>{for(const[n,c]of await m()){const r=n+"/.github";let o=new Set;for(const i of c){const e=a(i).replace(n,""),s=(await d()).get(i.split("/").pop());typeof s<"u"&&s==="npm"&&(o.add((await t.promises.readFile(p(`${u}/../../src/templates/.github/workflows/node`))).toString()),o.add(`
+import t from"fs";import{dirname as a,resolve as p}from"path";import{fileURLToPath as l}from"url";import m from"../lib/directories.js";import d from"../lib/package-types.js";const f=l(import.meta.url),u=a(f);var v=async()=>{for(const[n,c]of await m()){const e=n+"/.github";let r=new Set;for(const i of c){const o=a(i).replace(n,""),s=(await d()).get(i.split("/").pop());typeof s<"u"&&s==="npm"&&(r.add((await t.promises.readFile(p(`${u}/../../src/templates/.github/workflows/node`))).toString()),r.add(`
             - uses: pnpm/action-setup@v2.2.3
               with:
                   version: 7.13.4
@@ -13,17 +13,16 @@ import t from"fs";import{dirname as a,resolve as p}from"path";import{fileURLToPa
                           --unsafe-perm=true,
                           --lockfile-only
                         ]
-                  dest: .${e}
             - uses: actions/setup-node@v3.5.0
               with:
                   node-version: \${{ matrix.node-version }}
                   cache: "pnpm"
                   cache-dependency-path: |
-                      .${e}/pnpm-lock.yaml
-                  working-directory: .${e}
+                      **/pnpm-lock.yaml
+                  working-directory: .${o}
             - run: pnpm install
-              working-directory: .${e}
+              working-directory: .${o}
             - run: pnpm run build
-              working-directory: .${e}`))}if(o.size>0){try{await t.promises.mkdir(r+"/workflows",{recursive:!0})}catch{console.log(`Could not create: ${r}`)}try{await t.promises.writeFile(`${r}/workflows/node.yml`,`${Array.from(o).join(`
+              working-directory: .${o}`))}if(r.size>0){try{await t.promises.mkdir(e+"/workflows",{recursive:!0})}catch{console.log(`Could not create: ${e}`)}try{await t.promises.writeFile(`${e}/workflows/node.yml`,`${Array.from(r).join(`
 `)}
-`)}catch{console.log(`Could not create node base for: ${r}`)}}}};export{$ as default};
+`)}catch{console.log(`Could not create node base for: ${e}`)}}}};export{v as default};
