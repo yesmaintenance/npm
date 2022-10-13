@@ -26,11 +26,20 @@ export default async () => {
 
 			if (typeof environment !== "undefined" && environment === "npm") {
 				const packageJson = JSON.parse(packageFile);
-				if (
-					typeof packageJson.dependencies !== "undefined" ||
-					typeof packageJson.devDependencies !== "undefined"
-				) {
-					nodeWorkflowBase.add(`
+				const bundlesArray = [
+					"bundledDependencies",
+					"peerDependencies",
+					"peerDependenciesMeta",
+					"dependencies",
+					"optionalDependencies",
+					"devDependencies",
+					"extensionDependencies",
+					"bundleDependencies",
+				];
+
+				for (const bundle of bundlesArray) {
+					if (typeof packageJson[bundle]) {
+						nodeWorkflowBase.add(`
             - uses: pnpm/action-setup@v2.2.3
               with:
                   version: 7.13.4
@@ -52,7 +61,9 @@ export default async () => {
                   cache-dependency-path: '.${packageDirectory}/pnpm-lock.yaml'
             - run: pnpm install
               working-directory: .${packageDirectory}`);
+					}
 				}
+
 				if (
 					typeof packageJson.scripts !== "undefined" &&
 					typeof packageJson.scripts.build !== "undefined"
