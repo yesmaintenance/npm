@@ -17,8 +17,7 @@ import r from"fs";import{dirname as c,resolve as d}from"path";import{fileURLToPa
               with:
                   node-version: \${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: |
-                      .${i}/pnpm-lock.yaml
+                  cache-dependency-path: '.${i}/pnpm-lock.yaml'
             - run: pnpm install
               working-directory: .${i}`),typeof t.scripts<"u"&&typeof t.scripts.build<"u"&&n.add(`
             - run: pnpm run build
