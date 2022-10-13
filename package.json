@@ -18,7 +18,7 @@
 	},
 	"devDependencies": {
 		"@lightrix/config": "0.0.3",
-		"@lightrix/scripts": "0.0.3",
+		"@lightrix/scripts": "0.0.4",
 		"@octokit/core": "4.0.5",
 		"@types/node": "18.8.5",
 		"all-the-package-repos": "2.0.487",
