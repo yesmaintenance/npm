@@ -38,7 +38,7 @@ export default async () => {
 				];
 
 				for (const bundle of bundlesArray) {
-					if (typeof packageJson[bundle]) {
+					if (typeof packageJson[bundle] !== "undefined") {
 						nodeWorkflowBase.add(`
             - uses: pnpm/action-setup@v2.2.3
               with:
