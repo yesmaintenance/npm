@@ -1,5 +1,5 @@
 import packages from "./packages.js";
-import walkUntilGit from "./walkUntilGit.js";
+import walkUntilGit from "./walk-until-git.js";
 
 export default async () => {
 	const directories = new Map();

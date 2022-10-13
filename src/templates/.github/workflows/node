@@ -14,24 +14,4 @@ jobs:
 
         steps:
             - uses: actions/checkout@v3.1.0
-            - uses: pnpm/action-setup@v2.2.3
-              with:
-                  version: 7.13.4
-                  run_install: |
-                      - recursive: true
-                        args: [
-                          --shamefully-hoist=true,
-                          --child-concurrency=9999,
-                          --network-concurrency=9999,
-                          --prefer-frozen-lockfile=false,
-                          --strict-peer-dependencies=false,
-                          --unsafe-perm=true,
-                          --lockfile-only,
-                          --shared-workspace-lockfile=true
-                        ]
-            - uses: actions/setup-node@v3.5.0
-              with:
-                  node-version: ${{ matrix.node-version }}
-                  cache: "pnpm"
-                  cache-dependency-path: |
-                      **/pnpm-lock.yaml
+

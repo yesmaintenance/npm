@@ -1,10 +1,10 @@
 import FastGlob from "fast-glob";
 
 import env from "./env.js";
-import packageTypes from "./packageTypes.js";
+import packageTypes from "./package-types.js";
 
-export default async () => {
-	return new Set<string>([
+export default async () =>
+	new Set<string>([
 		...(await FastGlob(
 			[
 				...Array.from((await packageTypes()).keys()).map(
@@ -71,4 +71,3 @@ export default async () => {
 			}
 		)),
 	]);
-};

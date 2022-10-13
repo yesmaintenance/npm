@@ -1,22 +1,26 @@
-import allGitHubRepositories from "all-the-package-repos" assert {
-	type: "json"
-};
-
 import FastGlob from "fast-glob";
 import fs from "fs";
-
-import { Octokit } from "@octokit/core";
+import { dirname, resolve } from "path";
+import { fileURLToPath } from "url";
 
 import env from "../lib/env.js";
+import star from "../lib/star-repository.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export default async () => {
-	const octokit = new Octokit({
-		auth: env.GITHUB_AUTH_TOKEN,
-	});
-
 	const repositories: {
 		[key: string]: any;
-	} = allGitHubRepositories;
+	} = JSON.parse(
+		(
+			await fs.promises.readFile(
+				resolve(
+					`${__dirname}/../../../node_modules/all-the-package-repos/data/packages.json`
+				)
+			)
+		).toString()
+	);
 
 	const dependencies = new Set<string>();
 
@@ -24,31 +28,6 @@ export default async () => {
 		absolute: true,
 		cwd: env.BASE_DIR,
 	});
-
-	const star = async (url: string = "") => {
-		if (typeof url !== "string") {
-			return;
-		}
-
-		// start: starred
-		try {
-			await octokit.request(
-				`PUT /user/starred/${url.replace("https://github.com/", "")}`
-			);
-
-			console.log(
-				`Starred repository: ${url.replace("https://github.com/", "")}`
-			);
-		} catch (error) {
-			console.log(
-				`Could not star repository: ${url.replace(
-					"https://github.com/",
-					""
-				)}`
-			);
-		}
-		// end: starred
-	};
 
 	for (const packageFile of packages) {
 		const packageJson = JSON.parse(

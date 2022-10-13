@@ -1,8 +1,12 @@
 import fs from "fs";
 import { dirname, resolve } from "path";
+import { fileURLToPath } from "url";
 
 import directories from "../lib/directories.js";
-import packageTypes from "../lib/packageTypes.js";
+import packageTypes from "../lib/package-types.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export default async () => {
 	for (const [directory, packages] of await directories()) {
@@ -62,7 +66,9 @@ export default async () => {
 			await fs.promises.writeFile(
 				`${githubDir}/workflows/dependabot.yml`,
 				await fs.promises.readFile(
-					resolve("./src/templates/.github/workflows/dependabot")
+					resolve(
+						`${__dirname}/../../src/templates/.github/workflows/dependabot`
+					)
 				)
 			);
 		} catch {

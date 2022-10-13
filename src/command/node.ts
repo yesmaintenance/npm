@@ -1,8 +1,12 @@
 import fs from "fs";
 import { dirname, resolve } from "path";
+import { fileURLToPath } from "url";
 
 import directories from "../lib/directories.js";
-import packageTypes from "../lib/packageTypes.js";
+import packageTypes from "../lib/package-types.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export default async () => {
 	for (const [directory, packages] of await directories()) {
@@ -21,12 +25,36 @@ export default async () => {
 				nodeWorkflowBase.add(
 					(
 						await fs.promises.readFile(
-							resolve("./src/templates/.github/workflows/node")
+							resolve(
+								`${__dirname}/../../src/templates/.github/workflows/node`
+							)
 						)
 					).toString()
 				);
 
 				nodeWorkflowBase.add(`
+            - uses: pnpm/action-setup@v2.2.3
+              with:
+                  version: 7.13.4
+                  run_install: |
+                      - recursive: true
+                        args: [
+                          --shamefully-hoist=true,
+                          --child-concurrency=9999,
+                          --network-concurrency=9999,
+                          --prefer-frozen-lockfile=false,
+                          --strict-peer-dependencies=false,
+                          --unsafe-perm=true,
+                          --lockfile-only
+                        ]
+                  dest: .${packageDirectory}
+            - uses: actions/setup-node@v3.5.0
+              with:
+                  node-version: \${{ matrix.node-version }}
+                  cache: "pnpm"
+                  cache-dependency-path: |
+                      .${packageDirectory}/pnpm-lock.yaml
+                  working-directory: .${packageDirectory}
             - run: pnpm install
               working-directory: .${packageDirectory}
             - run: pnpm run build
