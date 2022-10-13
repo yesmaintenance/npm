@@ -16,23 +16,21 @@ export default async () => {
 
 		for (const _package of packages) {
 			const packageDirectory = dirname(_package).replace(directory, "");
+			const packageFile = (
+				await fs.promises.readFile(_package)
+			).toString();
 
 			const environment = (await packageTypes()).get(
 				_package.split("/").pop()
 			);
 
 			if (typeof environment !== "undefined" && environment === "npm") {
-				nodeWorkflowBase.add(
-					(
-						await fs.promises.readFile(
-							resolve(
-								`${__dirname}/../../src/templates/.github/workflows/node`
-							)
-						)
-					).toString()
-				);
-
-				nodeWorkflowBase.add(`
+				const packageJson = JSON.parse(packageFile);
+				if (
+					typeof packageJson.dependencies !== "undefined" ||
+					typeof packageJson.devDependencies !== "undefined"
+				) {
+					nodeWorkflowBase.add(`
             - uses: pnpm/action-setup@v2.2.3
               with:
                   version: 7.13.4
@@ -54,9 +52,16 @@ export default async () => {
                   cache-dependency-path: |
                       .${packageDirectory}/pnpm-lock.yaml
             - run: pnpm install
-              working-directory: .${packageDirectory}
+              working-directory: .${packageDirectory}`);
+				}
+				if (
+					typeof packageJson.scripts !== "undefined" &&
+					typeof packageJson.scripts.build !== "undefined"
+				) {
+					nodeWorkflowBase.add(`
             - run: pnpm run build
               working-directory: .${packageDirectory}`);
+				}
 			}
 		}
 
@@ -70,12 +75,29 @@ export default async () => {
 			}
 
 			try {
+				const nodeWorkflow = Array.from([
+					(
+						await fs.promises.readFile(
+							resolve(
+								`${__dirname}/../../src/templates/.github/workflows/node`
+							)
+						)
+					).toString(),
+					...nodeWorkflowBase,
+				]);
+
 				await fs.promises.writeFile(
 					`${githubDir}/workflows/node.yml`,
-					`${Array.from(nodeWorkflowBase).join("\n")}\n`
+					`${nodeWorkflow.join("\n")}\n`
 				);
 			} catch {
 				console.log(`Could not create node base for: ${githubDir}`);
+			}
+		} else {
+			try {
+				await fs.promises.rm(`${githubDir}/workflows/node.yml`);
+			} catch {
+				console.log(`Could not remove node base for: ${githubDir}`);
 			}
 		}
 	}
