@@ -17,7 +17,7 @@
 	"types": "./dist/index.d.ts",
 	"scripts": {
 		"build": "lightrix build src/**/*.ts",
-		"maintenance": "maintenance"
+		"maintenance": "ts-node ./src/index.ts"
 	},
 	"dependencies": {
 		"@octokit/core": "4.1.0",
@@ -25,13 +25,13 @@
 		"commander": "9.4.1",
 		"dotenv": "16.0.3",
 		"fast-glob": "3.2.12",
+		"deepmerge-ts": "4.2.2",
 		"zod": "3.19.1"
 	},
 	"devDependencies": {
 		"@lightrix/config": "0.0.3",
 		"@lightrix/scripts": "0.0.4",
 		"@types/node": "18.8.5",
-		"deepmerge-ts": "4.2.2",
 		"ts-node": "10.9.1"
 	},
 	"publishConfig": {

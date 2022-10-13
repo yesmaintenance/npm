@@ -1,4 +1,7 @@
-import allGitHubRepositories from "all-the-package-repos";
+import allGitHubRepositories from "all-the-package-repos" assert {
+	type: "json"
+};
+
 import FastGlob from "fast-glob";
 import fs from "fs";
 
