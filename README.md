@@ -38,8 +38,8 @@ Delete all GitHub Actions runs and their logs for all of your repositories:
 maintenance clean
 ```
 
-Create a dependabot.yml file in each of the .github directories for each of the
-packages in the monorepo:
+Create a `dependabot.yml` file in each of the .github directories for each of
+the packages in the monorepo:
 
 ```bash
 maintenance dependabot
@@ -53,20 +53,20 @@ maintenance edit-features
 ```
 
 Create a `node.yml` file in the `.github/workflows` directory for each
-repository that has a `package.json` file
+repository that has a `package.json` file.
 
 ```bash
 maintenance node
 ```
 
-Squash all the commits that have a message containing `Cleanup`
+Squash all commits that contain `Cleanup`.
 
 ```bash
 maintenance squash
 ```
 
-Find all the `package.json` files in the project, and then stars all the
-dependencies in those `package.json` files
+Find all the `package.json` files in the project, and then star all the
+dependencies in that `package.json`.
 
 ```bash
 maintenance star
