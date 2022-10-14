@@ -1,80 +1,96 @@
 import fs from "fs";
-import { dirname, resolve } from "path";
-import { fileURLToPath } from "url";
+import { dirname } from "path";
 
-import directories from "../lib/directories.js";
+import gitDirectories from "../lib/git-directories.js";
 import packageTypes from "../lib/package-types.js";
+import packages from "../lib/packages.js";
+import dependabot from "../options/dependabot.js";
+import type { containers } from "../options/workflow.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+/**
+ * It creates a `dependabot.yml` file in each `.github` directory of each repository in the current
+ * working directory
+ * @param {containers} files - This is an array of objects that contain the path, name, and workflow
+ * function.
+ */
+const writeDependabot = async (files: containers) => {
+	for (const { path, name, workflow } of files) {
+		for (const [directory, packageFiles] of await gitDirectories(
+			await packages()
+		)) {
+			const githubDir = directory + "/.github";
+			const workflowBase = await workflow();
 
-export default async () => {
-	for (const [directory, packages] of await directories()) {
-		const githubDir = directory + "/.github";
+			if (path == "/") {
+				for (const _package of packageFiles) {
+					const packageDirectory = dirname(_package).replace(
+						directory,
+						""
+					);
 
-		let dependabotBase = new Set<string>([
-			`version: 2
-	updates:
-		- package-ecosystem: "github-actions"
-		  directory: "/"
-		  schedule:
-			  interval: "daily"`,
-		]);
+					const environment = (await packageTypes()).get(
+						_package.split("/").pop()
+					);
 
-		for (const _package of packages) {
-			const packageDirectory = dirname(_package).replace(directory, "");
-			const environment = (await packageTypes()).get(
-				_package.split("/").pop()
-			);
-			dependabotBase.add(`
-		- package-ecosystem: "${
-			typeof environment !== "undefined"
-				? environment
-				: (() => {
-						switch (_package.split(".").pop()) {
-							case "csproj":
-								return "nuget";
-							default:
-								return "npm";
-						}
-				  })()
-		}"
-		  directory: "${packageDirectory ? packageDirectory : "/"}"
-		  schedule:
-			  interval: "daily"
-		  versioning-strategy: increase`);
-		}
+					workflowBase.add(`
+    - package-ecosystem: "${
+		typeof environment !== "undefined"
+			? environment
+			: (() => {
+					switch (_package.split(".").pop()) {
+						case "csproj":
+							return "nuget";
+						default:
+							return "npm";
+					}
+			  })()
+	}"
+      directory: "${packageDirectory ? packageDirectory : "/"}"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase`);
+				}
+			}
 
-		try {
-			await fs.promises.mkdir(githubDir + "/workflows", {
-				recursive: true,
-			});
-		} catch {
-			console.log(`Could not create: ${githubDir}`);
-		}
+			if (workflowBase.size > 0) {
+				try {
+					await fs.promises.mkdir(`${githubDir}${path}`, {
+						recursive: true,
+					});
+				} catch {
+					console.log(`Could not create: ${githubDir}${path}`);
+				}
 
-		try {
-			await fs.promises.writeFile(
-				`${githubDir}/dependabot.yml`,
-				`${Array.from(dependabotBase).join("\n")}\n`
-			);
-		} catch {
-			console.log(`Could not create dependabot base for: ${githubDir}`);
-		}
+				try {
+					await fs.promises.writeFile(
+						`${githubDir}${path}${name}`,
+						`${Array.from(workflowBase).join("\n")}`
+					);
+				} catch {
+					console.log(
+						`Could not create workflow for: ${githubDir}/dependabot.yml`
+					);
+				}
+			} else {
+				try {
+					await fs.promises.access(
+						`${githubDir}${path}${name}`,
+						fs.constants.F_OK
+					);
 
-		try {
-			await fs.promises.writeFile(
-				`${githubDir}/workflows/dependabot.yml`,
-				await fs.promises.readFile(
-					resolve(
-						`${__dirname}/../../src/templates/.github/workflows/dependabot`
-					)
-				)
-			);
-		} catch {
-			console.log(
-				`Could not create dependabot workflows for: ${githubDir}`
-			);
+					try {
+						await fs.promises.rm(`${githubDir}${path}${name}`);
+					} catch {
+						console.log(
+							`Could not remove ${path}${name} for: ${githubDir}`
+						);
+					}
+				} catch {}
+			}
 		}
 	}
+};
+
+export default () => {
+	writeDependabot(dependabot);
 };

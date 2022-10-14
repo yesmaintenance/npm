@@ -1,1 +1,0 @@
-import r from"./packages.js";import o from"./walk-until-git.js";var n=async()=>{const t=new Map;for(const a of await r()){const e=await o(a);t.has(e)?t.set(e,t.get(e).add(a)):t.set(e,new Set([a]))}return t};export{n as default};

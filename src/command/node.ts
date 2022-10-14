@@ -1,114 +1,140 @@
 import fs from "fs";
-import { dirname, resolve } from "path";
-import { fileURLToPath } from "url";
+import { dirname } from "path";
 
-import directories from "../lib/directories.js";
+import gitDirectories from "../lib/git-directories.js";
 import packageTypes from "../lib/package-types.js";
+import packages from "../lib/packages.js";
+import node from "../options/node.js";
+import type { containers } from "../options/workflow.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+/**
+ * It takes a list of files, and for each file, it checks if the file is a workflow file, and if it is,
+ * it checks if the file is a node workflow file, and if it is, it checks if the file is a node
+ * workflow file for a package that has dependencies, and if it is, it adds the dependencies to the
+ * workflow file
+ * @param {containers} files - containers
+ */
+const writeNode = async (files: containers) => {
+	for (const { path, name, workflow } of files) {
+		for (const [directory, packageFiles] of await gitDirectories(
+			await packages()
+		)) {
+			const githubDir = directory + "/.github";
+			const workflowBase = await workflow();
 
-export default async () => {
-	for (const [directory, packages] of await directories()) {
-		const githubDir = directory + "/.github";
+			if (path == "/workflows/" && name == "node.yml") {
+				for (const _package of packageFiles) {
+					const packageDirectory = dirname(_package).replace(
+						directory,
+						""
+					);
+					const packageFile = (
+						await fs.promises.readFile(_package)
+					).toString();
 
-		let nodeWorkflowBase = new Set<string>();
+					const environment = (await packageTypes()).get(
+						_package.split("/").pop()
+					);
 
-		for (const _package of packages) {
-			const packageDirectory = dirname(_package).replace(directory, "");
-			const packageFile = (
-				await fs.promises.readFile(_package)
-			).toString();
+					if (
+						typeof environment !== "undefined" &&
+						environment === "npm"
+					) {
+						const packageJson = JSON.parse(packageFile);
 
-			const environment = (await packageTypes()).get(
-				_package.split("/").pop()
-			);
-
-			if (typeof environment !== "undefined" && environment === "npm") {
-				const packageJson = JSON.parse(packageFile);
-				const bundlesArray = [
-					"bundledDependencies",
-					"peerDependencies",
-					"peerDependenciesMeta",
-					"dependencies",
-					"optionalDependencies",
-					"devDependencies",
-					"extensionDependencies",
-					"bundleDependencies",
-				];
-
-				for (const bundle of bundlesArray) {
-					if (typeof packageJson[bundle] !== "undefined") {
-						nodeWorkflowBase.add(`
-            - uses: pnpm/action-setup@v2.2.3
-              with:
-                  version: 7.13.4
-                  run_install: |
-                      - recursive: true
-                        args: [
-                          --shamefully-hoist=true,
-                          --child-concurrency=9999,
-                          --network-concurrency=9999,
-                          --prefer-frozen-lockfile=false,
-                          --strict-peer-dependencies=false,
-                          --unsafe-perm=true,
-                          --lockfile-only
-                        ]
+						for (const bundle of [
+							"bundledDependencies",
+							"peerDependencies",
+							"peerDependenciesMeta",
+							"dependencies",
+							"optionalDependencies",
+							"devDependencies",
+							"extensionDependencies",
+							"bundleDependencies",
+						]) {
+							if (typeof packageJson[bundle] !== "undefined") {
+								workflowBase.add(`
             - uses: actions/setup-node@v3.5.0
               with:
                   node-version: \${{ matrix.node-version }}
                   cache: "pnpm"
                   cache-dependency-path: '.${packageDirectory}/pnpm-lock.yaml'
             - run: pnpm install
-              working-directory: .${packageDirectory}`);
+              working-directory: .${packageDirectory}
+`);
+							}
+						}
+
+						for (const key in packageJson) {
+							if (
+								Object.prototype.hasOwnProperty.call(
+									packageJson,
+									key
+								)
+							) {
+								const values = packageJson[key];
+								if (key == "scripts") {
+									for (const scripts in values) {
+										if (
+											Object.prototype.hasOwnProperty.call(
+												values,
+												scripts
+											)
+										) {
+											if (scripts == "build") {
+												workflowBase.add(`
+            - run: pnpm run build
+              working-directory: .${packageDirectory}
+`);
+											}
+										}
+									}
+								}
+							}
+						}
 					}
 				}
+			}
 
-				if (
-					typeof packageJson.scripts !== "undefined" &&
-					typeof packageJson.scripts.build !== "undefined"
-				) {
-					nodeWorkflowBase.add(`
-            - run: pnpm run build
-              working-directory: .${packageDirectory}`);
+			if (workflowBase.size > 0) {
+				try {
+					await fs.promises.mkdir(`${githubDir}${path}`, {
+						recursive: true,
+					});
+				} catch {
+					console.log(`Could not create: ${githubDir}${path}`);
 				}
-			}
-		}
 
-		if (nodeWorkflowBase.size > 0) {
-			try {
-				await fs.promises.mkdir(githubDir + "/workflows", {
-					recursive: true,
-				});
-			} catch {
-				console.log(`Could not create: ${githubDir}`);
-			}
+				try {
+					await fs.promises.writeFile(
+						`${githubDir}${path}${name}`,
+						`${Array.from(workflowBase).join("\n")}`
+					);
+				} catch {
+					console.log(
+						`Could not create workflow for: ${githubDir}/dependabot.yml`
+					);
+				}
+			} else {
+				try {
+					await fs.promises.access(
+						`${githubDir}${path}${name}`,
+						fs.constants.F_OK
+					);
 
-			try {
-				const nodeWorkflow = Array.from([
-					(
-						await fs.promises.readFile(
-							resolve(
-								`${__dirname}/../../src/templates/.github/workflows/node`
-							)
-						)
-					).toString(),
-					...nodeWorkflowBase,
-				]);
-
-				await fs.promises.writeFile(
-					`${githubDir}/workflows/node.yml`,
-					`${nodeWorkflow.join("\n")}\n`
-				);
-			} catch {
-				console.log(`Could not create node base for: ${githubDir}`);
-			}
-		} else {
-			try {
-				await fs.promises.rm(`${githubDir}/workflows/node.yml`);
-			} catch {
-				console.log(`Could not remove node base for: ${githubDir}`);
+					try {
+						await fs.promises.rm(`${githubDir}${path}${name}`);
+					} catch {
+						console.log(
+							`Could not remove ${path}${name} for: ${githubDir}`
+						);
+					}
+				} catch {}
 			}
 		}
 	}
+};
+
+export default () => {
+	writeNode(node);
 };

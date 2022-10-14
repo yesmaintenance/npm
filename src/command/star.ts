@@ -9,7 +9,11 @@ import star from "../lib/star-repository.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export default async () => {
+/**
+ * It finds all the package.json files in the project, and then stars all the dependencies in those
+ * package.json files
+ */
+const starUsed = async () => {
 	const repositories: {
 		[key: string]: any;
 	} = JSON.parse(
@@ -56,3 +60,4 @@ export default async () => {
 		star(repositories[dependency]);
 	}
 };
+export default starUsed;

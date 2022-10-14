@@ -2,7 +2,10 @@ import { Octokit } from "@octokit/core";
 
 import env from "../lib/env.js";
 
-export default async () => {
+/**
+ * It enables all the features that GitHub offers for all the repositories that I have access to
+ */
+const edit = async () => {
 	const user = env.GITHUB_USER;
 
 	const orgs: {
@@ -198,3 +201,5 @@ export default async () => {
 	}
 	// end: repos
 };
+
+export default edit;
