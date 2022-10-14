@@ -32,7 +32,7 @@ pnpx @nikolarhristov/maintenance
 
 ## Then simply run each of the commands:
 
-Delete all GitHub Actions logs and runs for all of your repositories:
+Delete all GitHub Actions runs and their logs for all of your repositories:
 
 ```bash
 maintenance clean

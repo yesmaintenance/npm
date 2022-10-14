@@ -56,21 +56,6 @@ const clean = async () => {
 			).data.workflow_runs) {
 				try {
 					await octokit.request(
-						`DELETE /repos/${repo.owner}/${repo.name}/actions/runs/${run.id}/logs`,
-						{ owner: repo.owner, repo: repo.name, run_id: run.id }
-					);
-
-					console.log(
-						`Deleted actions/runs/${run.id}/logs for: ${repo.name}`
-					);
-				} catch {
-					console.log(
-						`Could not delete actions/runs/${run.id}/logs for: ${repo.name}`
-					);
-				}
-
-				try {
-					await octokit.request(
 						`DELETE /repos/${repo.owner}/${repo.name}/actions/runs/${run.id}`,
 						{ owner: repo.owner, repo: repo.name, run_id: run.id }
 					);
@@ -81,6 +66,21 @@ const clean = async () => {
 				} catch {
 					console.log(
 						`Could not delete actions/runs/${run.id} for: ${repo.name}`
+					);
+				}
+
+				try {
+					await octokit.request(
+						`DELETE /repos/${repo.owner}/${repo.name}/actions/runs/${run.id}/logs`,
+						{ owner: repo.owner, repo: repo.name, run_id: run.id }
+					);
+
+					console.log(
+						`Deleted actions/runs/${run.id}/logs for: ${repo.name}`
+					);
+				} catch {
+					console.log(
+						`Could not delete actions/runs/${run.id}/logs for: ${repo.name}`
 					);
 				}
 			}
