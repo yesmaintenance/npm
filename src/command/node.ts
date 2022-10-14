@@ -53,7 +53,7 @@ const writeWorkflows = async (files: containers) => {
 							"bundleDependencies",
 						]) {
 							if (typeof packageJson[bundle] !== "undefined") {
-								workflowBase.add(`            - uses: actions/setup-node@v3.5.0
+								workflowBase.add(`            - uses: actions/setup-node@v3.5.1
               with:
                   node-version: \${{ matrix.node-version }}
                   cache: "pnpm"
