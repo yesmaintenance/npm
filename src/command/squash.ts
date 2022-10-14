@@ -1,8 +1,8 @@
 import gitDirectories from "../lib/git-directories.js";
-import packages from "../lib/packages.js";
+import gits from "../lib/gits.js";
 
 const squash = async () => {
-	for (const [directory] of await gitDirectories(await packages())) {
+	for (const [directory] of await gitDirectories(await gits())) {
 		console.log(directory);
 	}
 };
