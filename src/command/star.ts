@@ -20,7 +20,7 @@ const starUsed = async () => {
 		(
 			await fs.promises.readFile(
 				resolve(
-					`${__dirname}/../../../node_modules/all-the-package-repos/data/packages.json`
+					`${__dirname}/../../node_modules/all-the-package-repos/data/packages.json`
 				)
 			)
 		).toString()

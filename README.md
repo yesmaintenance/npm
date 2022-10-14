@@ -10,7 +10,7 @@ GITHUB_AUTH_TOKEN="your_github_authentication_token"
 
 ## Installation
 
-```sh
+```bash
 # Using NPM
 npm install -g @nikolarhristov/maintenance
 # Using Yarn
@@ -21,7 +21,7 @@ pnpm install -g @nikolarhristov/maintenance
 
 or direct usage:
 
-```sh
+```bash
 # Using NPM
 npx @nikolarhristov/maintenance
 # Using Yarn
