@@ -14,7 +14,7 @@ import type { containers } from "../options/workflow.js";
  * workflow file
  * @param {containers} files - containers
  */
-const writeNode = async (files: containers) => {
+const writeWorkflows = async (files: containers) => {
 	for (const { path, name, workflow } of files) {
 		for (const [directory, packageFiles] of await gitDirectories(
 			await packages()
@@ -53,15 +53,13 @@ const writeNode = async (files: containers) => {
 							"bundleDependencies",
 						]) {
 							if (typeof packageJson[bundle] !== "undefined") {
-								workflowBase.add(`
-            - uses: actions/setup-node@v3.5.0
+								workflowBase.add(`            - uses: actions/setup-node@v3.5.0
               with:
                   node-version: \${{ matrix.node-version }}
                   cache: "pnpm"
                   cache-dependency-path: '.${packageDirectory}/pnpm-lock.yaml'
             - run: pnpm install
-              working-directory: .${packageDirectory}
-`);
+              working-directory: .${packageDirectory}`);
 							}
 						}
 
@@ -108,7 +106,7 @@ const writeNode = async (files: containers) => {
 				try {
 					await fs.promises.writeFile(
 						`${githubDir}${path}${name}`,
-						`${Array.from(workflowBase).join("\n")}`
+						`${Array.from(workflowBase).join("")}`
 					);
 				} catch {
 					console.log(
@@ -136,5 +134,5 @@ const writeNode = async (files: containers) => {
 };
 
 export default () => {
-	writeNode(node);
+	writeWorkflows(node);
 };

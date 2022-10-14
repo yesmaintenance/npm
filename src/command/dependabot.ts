@@ -13,7 +13,7 @@ import type { containers } from "../options/workflow.js";
  * @param {containers} files - This is an array of objects that contain the path, name, and workflow
  * function.
  */
-const writeDependabot = async (files: containers) => {
+const writeWorkflows = async (files: containers) => {
 	for (const { path, name, workflow } of files) {
 		for (const [directory, packageFiles] of await gitDirectories(
 			await packages()
@@ -32,8 +32,7 @@ const writeDependabot = async (files: containers) => {
 						_package.split("/").pop()
 					);
 
-					workflowBase.add(`
-    - package-ecosystem: "${
+					workflowBase.add(`    - package-ecosystem: "${
 		typeof environment !== "undefined"
 			? environment
 			: (() => {
@@ -64,7 +63,7 @@ const writeDependabot = async (files: containers) => {
 				try {
 					await fs.promises.writeFile(
 						`${githubDir}${path}${name}`,
-						`${Array.from(workflowBase).join("\n")}`
+						`${Array.from(workflowBase).join("")}`
 					);
 				} catch {
 					console.log(
@@ -92,5 +91,5 @@ const writeDependabot = async (files: containers) => {
 };
 
 export default () => {
-	writeDependabot(dependabot);
+	writeWorkflows(dependabot);
 };
