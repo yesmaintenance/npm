@@ -29,7 +29,7 @@
 		"zod": "3.19.1"
 	},
 	"devDependencies": {
-		"@lightrix/config": "0.0.3",
+		"@lightrix/config": "0.0.4",
 		"@lightrix/scripts": "0.0.5",
 		"@types/node": "18.8.5",
 		"ts-node": "10.9.1"
