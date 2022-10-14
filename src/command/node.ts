@@ -56,6 +56,7 @@ const writeWorkflows = async (files: containers) => {
 								workflowBase.add(`            - uses: actions/setup-node@v3.5.1
               with:
                   node-version: \${{ matrix.node-version }}
+                  check-latest: true
                   cache: "pnpm"
                   cache-dependency-path: '.${packageDirectory}/pnpm-lock.yaml'
             - run: pnpm install
