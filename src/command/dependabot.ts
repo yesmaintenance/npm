@@ -32,7 +32,8 @@ const writeWorkflows = async (files: containers) => {
 						_package.split("/").pop()
 					);
 
-					workflowBase.add(`    - package-ecosystem: "${
+					workflowBase.add(`
+    - package-ecosystem: "${
 		typeof environment !== "undefined"
 			? environment
 			: (() => {
@@ -47,7 +48,8 @@ const writeWorkflows = async (files: containers) => {
       directory: "${packageDirectory ? packageDirectory : "/"}"
       schedule:
           interval: "daily"
-      versioning-strategy: increase`);
+      versioning-strategy: increase
+`);
 				}
 			}
 
