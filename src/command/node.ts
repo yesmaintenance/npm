@@ -53,11 +53,15 @@ const writeWorkflows = async (files: containers) => {
 							"bundleDependencies",
 						]) {
 							if (typeof packageJson[bundle] !== "undefined") {
-								workflowBase.add(`            - uses: actions/setup-node@v3.5.1
+								workflowBase.add(`
+            - uses: actions/setup-node@v3.5.1
               with:
                   node-version: \${{ matrix.node-version }}
-            - run: npm install
-              working-directory: .${packageDirectory}`);
+                  cache: "pnpm"
+                  cache-dependency-path: .${packageDirectory}/pnpm-lock.yaml
+            - run: pnpm install
+              working-directory: .${packageDirectory}
+`);
 							}
 						}
 
@@ -79,7 +83,7 @@ const writeWorkflows = async (files: containers) => {
 										) {
 											if (scripts == "build") {
 												workflowBase.add(`
-            - run: npm run build
+            - run: pnpm run build
               working-directory: .${packageDirectory}
 `);
 											}
