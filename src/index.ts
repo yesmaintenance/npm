@@ -2,6 +2,7 @@ import { Command } from "commander";
 
 import clean from "./command/clean.js";
 import dependabot from "./command/dependabot.js";
+import dispatch from "./command/dispatch.js";
 import edit from "./command/edit.js";
 import node from "./command/node.js";
 import squash from "./command/squash.js";
@@ -9,12 +10,21 @@ import star from "./command/star.js";
 
 const program = new Command();
 
-program.name("maintenance").description("Maintenance tools").version("0.0.1");
+program.name("maintenance").description("Maintenance tools");
 
 program
 	.command("clean")
 	.description("Clean GitHub repositories.")
 	.action(clean);
+
+program
+	.command("dispatch")
+	.argument(
+		"[repositories...]",
+		"Repositories on which to trigger dispatch events."
+	)
+	.description("Trigger dispatch events.")
+	.action(dispatch);
 
 program.command("squash").description("Squash git commits.").action(squash);
 

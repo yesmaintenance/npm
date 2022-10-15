@@ -10,7 +10,7 @@ GITHUB_AUTH_TOKEN="your_github_authentication_token"
 
 ## Installation
 
-```bash
+```sh
 # Using NPM
 npm install -g @nikolarhristov/maintenance
 # Using Yarn
@@ -21,7 +21,7 @@ pnpm install -g @nikolarhristov/maintenance
 
 or direct usage:
 
-```bash
+```sh
 # Using NPM
 npx @nikolarhristov/maintenance
 # Using Yarn
@@ -34,41 +34,50 @@ pnpx @nikolarhristov/maintenance
 
 Delete all GitHub Actions runs and their logs for all of your repositories:
 
-```bash
+```sh
 maintenance clean
 ```
 
 Create a `dependabot.yml` file in each of the .github directories for each of
 the packages in the monorepo:
 
-```bash
+```sh
 maintenance dependabot
+```
+
+Dispatch all workflows for all repositories for a given user:
+
+```sh
+maintenance dispatch
+
+// or specific repositories by name
+maintenance dispatch repository-name repository-name-2
 ```
 
 Enable all the features that GitHub offers for all the repositories that you
 have access to:
 
-```bash
+```sh
 maintenance edit-features
 ```
 
 Create a `node.yml` file in the `.github/workflows` directory for each
 repository that has a `package.json` file.
 
-```bash
+```sh
 maintenance node
 ```
 
 Squash all commits that contain `Cleanup`.
 
-```bash
+```sh
 maintenance squash
 ```
 
 Find all the `package.json` files in the project, and then star all the
 dependencies in that `package.json`.
 
-```bash
+```sh
 maintenance star
 ```
 
