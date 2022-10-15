@@ -56,9 +56,7 @@ const writeWorkflows = async (files: containers) => {
 								workflowBase.add(`            - uses: actions/setup-node@v3.5.1
               with:
                   node-version: \${{ matrix.node-version }}
-                  cache: "pnpm"
-                  cache-dependency-path: .${packageDirectory}/pnpm-lock.yaml
-            - run: pnpm install
+            - run: npm install
               working-directory: .${packageDirectory}`);
 							}
 						}
@@ -81,7 +79,7 @@ const writeWorkflows = async (files: containers) => {
 										) {
 											if (scripts == "build") {
 												workflowBase.add(`
-            - run: pnpm run build
+            - run: npm run build
               working-directory: .${packageDirectory}
 `);
 											}
