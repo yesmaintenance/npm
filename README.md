@@ -50,7 +50,7 @@ Dispatch all workflows for all repositories for a given user:
 ```sh
 maintenance dispatch
 
-// or specific repositories by name
+# or specific repositories by name
 maintenance dispatch repository-name repository-name-2
 ```
 
