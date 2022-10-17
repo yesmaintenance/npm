@@ -92,6 +92,6 @@ const writeWorkflows = async (files: containers) => {
 	}
 };
 
-export default () => {
-	writeWorkflows(dependabot);
+export default async () => {
+	await writeWorkflows(dependabot);
 };

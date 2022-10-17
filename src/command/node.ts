@@ -135,6 +135,6 @@ const writeWorkflows = async (files: containers) => {
 	}
 };
 
-export default () => {
-	writeWorkflows(node);
+export default async () => {
+	await writeWorkflows(node);
 };
