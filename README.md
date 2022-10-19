@@ -3,6 +3,9 @@
 [![npm (scoped)](https://img.shields.io/npm/v/@nikolarhristov/maintenance?color=black&label=%20&logo=npm&logoColor=black)][@nikolarhristov/maintenance]
 [![.github/workflows/node.yml](https://github.com/nikolaxhristov/maintenance/actions/workflows/node.yml/badge.svg)](https://github.com/nikolaxhristov/maintenance/actions/workflows/node.yml)
 
+[![Node](https://img.shields.io/github/workflow/status/nikolaxhristov/maintenance/Node?color=black&label=%20&logo=github&logoColor=black)][@nikolarhristov/maintenance]
+[![Dependabot](https://img.shields.io/github/workflow/status/nikolaxhristov/maintenance/Dependabot?color=black&label=%20&logo=github&logoColor=black)][@nikolarhristov/maintenance]
+
 **.env**
 
 ```env
