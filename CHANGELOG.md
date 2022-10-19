@@ -1,3 +1,7 @@
+## 0.0.3
+
+-   Adds rust
+
 ## 0.0.2
 
 -   Cleanup

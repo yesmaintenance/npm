@@ -68,6 +68,19 @@ repository that has a `package.json` file.
 maintenance node
 ```
 
+Create a `rust.yml` file in the `.github/workflows` directory for each
+repository that has a `Cargo.toml` file.
+
+```sh
+maintenance rust
+```
+
+Run all workflow tasks.
+
+```sh
+maintenance workflows
+```
+
 Squash all commits that contain `Cleanup`.
 
 ```sh

@@ -6,7 +6,6 @@ import dispatch from "./command/dispatch.js";
 import edit from "./command/edit.js";
 import node from "./command/node.js";
 import rust from "./command/rust.js";
-import squash from "./command/squash.js";
 import star from "./command/star.js";
 
 const program = new Command();
@@ -26,8 +25,6 @@ program
 	)
 	.description("Trigger dispatch events.")
 	.action(dispatch);
-
-program.command("squash").description("Squash git commits.").action(squash);
 
 program
 	.command("dependabot")
