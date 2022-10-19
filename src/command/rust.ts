@@ -1,10 +1,10 @@
 import fs from "fs";
-import { dirname } from "path";
+import { dirname, basename } from "path";
 
 import gitDirectories from "../lib/git-directories.js";
 import packageTypes from "../lib/package-types.js";
 import packages from "../lib/packages.js";
-import node from "../options/node.js";
+import rust from "../options/rust.js";
 import type { containers } from "../options/workflow.js";
 
 /**
@@ -22,15 +22,12 @@ const writeWorkflows = async (files: containers) => {
 			const githubDir = directory + "/.github";
 			const workflowBase = await workflow();
 
-			if (path == "/workflows/" && name == "node.yml") {
+			if (path == "/workflows/" && name == "rust.yml") {
 				for (const _package of packageFiles) {
 					const packageDirectory = dirname(_package).replace(
 						directory,
 						""
 					);
-					const packageFile = (
-						await fs.promises.readFile(_package)
-					).toString();
 
 					const environment = (await packageTypes()).get(
 						_package.split("/").pop()
@@ -38,60 +35,16 @@ const writeWorkflows = async (files: containers) => {
 
 					if (
 						typeof environment !== "undefined" &&
-						environment === "npm"
+						environment === "cargo"
 					) {
-						const packageJson = JSON.parse(packageFile);
-
-						for (const bundle of [
-							"bundledDependencies",
-							"peerDependencies",
-							"peerDependenciesMeta",
-							"dependencies",
-							"optionalDependencies",
-							"devDependencies",
-							"extensionDependencies",
-							"bundleDependencies",
-						]) {
-							if (typeof packageJson[bundle] !== "undefined") {
-								workflowBase.add(`
-            - uses: actions/setup-node@v3.5.1
+						workflowBase.add(`
+            - uses: actions-rs/cargo@v1.0.3
               with:
-                  node-version: \${{ matrix.node-version }}
-                  cache: "pnpm"
-                  cache-dependency-path: .${packageDirectory}/pnpm-lock.yaml
-            - run: pnpm install
-              working-directory: .${packageDirectory}
+                command: build
+                args: --release --all-features --manifest-path .${packageDirectory}/${basename(
+							_package
+						)}
 `);
-							}
-						}
-
-						for (const key in packageJson) {
-							if (
-								Object.prototype.hasOwnProperty.call(
-									packageJson,
-									key
-								)
-							) {
-								const values = packageJson[key];
-								if (key == "scripts") {
-									for (const scripts in values) {
-										if (
-											Object.prototype.hasOwnProperty.call(
-												values,
-												scripts
-											)
-										) {
-											if (scripts == "build") {
-												workflowBase.add(`
-            - run: pnpm run build
-              working-directory: .${packageDirectory}
-`);
-											}
-										}
-									}
-								}
-							}
-						}
 					}
 				}
 			}
@@ -136,5 +89,5 @@ const writeWorkflows = async (files: containers) => {
 };
 
 export default async () => {
-	await writeWorkflows(node);
+	await writeWorkflows(rust);
 };

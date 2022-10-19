@@ -5,6 +5,7 @@ import dependabot from "./command/dependabot.js";
 import dispatch from "./command/dispatch.js";
 import edit from "./command/edit.js";
 import node from "./command/node.js";
+import rust from "./command/rust.js";
 import squash from "./command/squash.js";
 import star from "./command/star.js";
 
@@ -42,6 +43,20 @@ program
 	.command("node")
 	.description("Put node into GitHub Actions.")
 	.action(node);
+
+program
+	.command("rust")
+	.description("Put rust into GitHub Actions.")
+	.action(rust);
+
+program
+	.command("workflows")
+	.description("Trigger all workflow tasks.")
+	.action(async () => {
+		await rust();
+		await dependabot();
+		await node();
+	});
 
 program
 	.command("star")

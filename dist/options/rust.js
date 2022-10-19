@@ -1,0 +1,1 @@
+import o from"fs";import{dirname as r,resolve as t}from"path";import{fileURLToPath as e}from"url";const m=e(import.meta.url),s=r(m),i=new Set([{path:"/workflows/",name:"rust.yml",workflow:async()=>new Set([(await o.promises.readFile(t(`${s}/../../src/templates/.github/workflows/rust.yml`))).toString()])}]);var f=i;export{f as default};
