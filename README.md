@@ -1,5 +1,8 @@
 # [nikolarhristov] maintenance scripts
 
+[![npm (scoped)](https://img.shields.io/npm/v/@nikolarhristov/maintenance?color=black&label=%20&logo=npm&logoColor=black)][@nikolarhristov/maintenance]
+[![.github/workflows/node.yml](https://github.com/lightrix/npm/actions/workflows/node.yml/badge.svg)](https://github.com/lightrix/npm/actions/workflows/node.yml)
+
 **.env**
 
 ```env
@@ -95,3 +98,4 @@ maintenance star
 ```
 
 [nikolarhristov]: https://github.com/nikolaxhristov
+[@nikolarhristov/maintenance]: https://npmjs.org/@nikolarhristov/maintenance
