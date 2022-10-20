@@ -12,22 +12,22 @@ GITHUB_AUTH_TOKEN="your_github_authentication_token"
 
 ```sh
 # Using NPM
-npm install -g @nikolarhristov/maintenance
+npm install -g @yesmaintenance/scripts
 # Using Yarn
-yarn global add @nikolarhristov/maintenance
+yarn global add @yesmaintenance/scripts
 # Using PNPM
-pnpm install -g @nikolarhristov/maintenance
+pnpm install -g @yesmaintenance/scripts
 ```
 
 or direct usage:
 
 ```sh
 # Using NPM
-npx @nikolarhristov/maintenance
+npx @yesmaintenance/scripts
 # Using Yarn
-yarn @nikolarhristov/maintenance
+yarn @yesmaintenance/scripts
 # Using PNPM
-pnpx @nikolarhristov/maintenance
+pnpx @yesmaintenance/scripts
 ```
 
 ## Then simply run each of the commands:
@@ -95,7 +95,7 @@ maintenance star
 ```
 
 [nikolarhristov]: https://github.com/nikolaxhristov
-[@nikolarhristov/maintenance]: https://npmjs.org/@nikolarhristov/maintenance
+[@yesmaintenance/scripts]: https://npmjs.org/@yesmaintenance/scripts
 [node.yml]:
 	https://github.com/nikolaxhristov/maintenance/actions/workflows/node.yml
 

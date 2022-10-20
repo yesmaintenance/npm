@@ -1,14 +1,15 @@
 {
-	"name": "@nikolarhristov/maintenance",
+	"name": "@yesmaintenance/scripts",
 	"version": "0.0.3",
 	"type": "module",
 	"repository": {
+		"directory": "scripts",
 		"type": "git",
-		"url": "https://github.com/nikolaxhristov/maintenance.git"
+		"url": "https://github.com/yesmaintenance/scripts.git"
 	},
-	"homepage": "https://github.com/nikolaxhristov/maintenance#readme",
+	"homepage": "https://github.com/yesmaintenance/scripts#readme",
 	"bugs": {
-		"url": "https://github.com/nikolaxhristov/maintenance/issues"
+		"url": "https://github.com/yesmaintenance/scripts/issues"
 	},
 	"bin": {
 		"maintenance": "./dist/index.js"
@@ -21,7 +22,7 @@
 	},
 	"dependencies": {
 		"@octokit/core": "4.1.0",
-		"all-the-package-repos": "2.0.501",
+		"all-the-package-repos": "2.0.502",
 		"commander": "9.4.1",
 		"deepmerge-ts": "4.2.2",
 		"dotenv": "16.0.3",
@@ -31,7 +32,7 @@
 	"devDependencies": {
 		"@lightrix/config": "0.0.5",
 		"@lightrix/scripts": "0.0.8",
-		"@types/node": "18.11.2",
+		"@types/node": "18.11.3",
 		"ts-node": "10.9.1"
 	},
 	"publishConfig": {

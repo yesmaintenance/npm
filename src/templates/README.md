@@ -1,4 +1,6 @@
-%HEADING% %EMOJI% | %BADGES%
+%HEADING%
+
+%BADGES%
 
 %CONTENT%
 
