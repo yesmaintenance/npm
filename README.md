@@ -1,9 +1,5 @@
 # [nikolarhristov] maintenance scripts
 
-[![npm](https://img.shields.io/npm/v/@nikolarhristov/maintenance?color=black&label=%20&logo=npm&logoColor=white)][@nikolarhristov/maintenance]
-[![Dependabot](https://img.shields.io/github/workflow/status/nikolaxhristov/maintenance/Dependabot?color=black&label=%20&logo=dependabot&logoColor=white)][@nikolarhristov/maintenance]
-[![Node](https://img.shields.io/github/workflow/status/nikolaxhristov/maintenance/Node?color=black&label=%20&logo=node.js&logoColor=white)][node.yml]
-
 **.env**
 
 ```env
