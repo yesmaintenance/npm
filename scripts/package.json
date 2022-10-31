@@ -32,7 +32,7 @@
 	"devDependencies": {
 		"@lightrix/config": "0.0.6",
 		"@lightrix/scripts": "0.0.13",
-		"@types/node": "18.11.7",
+		"@types/node": "18.11.8",
 		"ts-node": "10.9.1"
 	},
 	"publishConfig": {
